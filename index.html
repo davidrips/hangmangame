@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+    <title>Hangman Game</title>
+</head>
+<header>
+<h1>Hangman!</h1>
+</header>
+<body>
+
+<div id="gamey">
+<p>Press any key to start playing!</p>
+</div>
+<div id=blanks> </div>
+
+
+<script type="text/javascript">
+
+var wins = 0
+
+
+
+var game = {
+	userGuess: [],
+	words:['hamlet', 'macbeth', 'puck'], 
+	guesses: [],
+	blanks: [],
+	word: [],
+	triesLeft: [],
+	
+
+	init: function (){
+		this.triesLeft = 15;
+		this.guesses.length = 0;
+		this.render();
+		this.pickWord();
+		this.setWord();
+		this.play();
+		this.lose();
+		this.win();
+	},
+
+	
+
+	render: function(){document.querySelector('#gamey').innerHTML = game.html;
+	}, 
+
+	pickWord: function(){
+		this.word = this.words[Math.floor(Math.random()*this.words.length)];
+		
+	},
+
+	setWord: function(){
+		for (var i=0; i < this.word.length; i++){this.blanks.push('_')}
+	},
+
+	play: function(){
+		for (var i=0; i<this.word.length; i++){
+		//if wrong guess, displays wrong letter and subtracts//
+			if (this.word.indexOf(this.userGuess) === -1){this.guesses.push(this.userGuess); this.triesLeft--; 
+		//if correct, replaces the appropriate blank with guess//
+	 		}else{this.blanks[this.word.indexOf(this.userGuess)] = this.userGuess;
+	 		}
+		}
+	},
+
+	lose: function(){
+		//if you run out of tries, the game tells you the answer and resets//
+			if (this.triesLeft<1){alert('You ran out of tries! The answer was' + this.word)}
+		},
+
+	win: function(){
+
+		//declares a win- this is where to add elements during a win//
+
+		if (this.blanks.indexOf('_') === -1){wins++; game.init;}
+	},
+
+	html: "<p>wins: " + 
+        wins + 
+        "</p>" +
+        "<p>" + this.blanks + "</p>" +
+        "<p>Tries Remaining: " + 
+        this.triesLeft + 
+        "</p>" +
+        "<p>Guesses: " + 
+        this.guesses + 
+        "</p>"
+
+ };
+
+
+
+
+game.init();
+
+
+
+
+document.onkeyup = function(event) {
+	
+  game.userGuess = String.fromCharCode(event.keyCode).toLowerCase();};
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script></body></html>
