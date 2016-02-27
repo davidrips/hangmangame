@@ -11,7 +11,17 @@
 <div id="gamey">
 <p>Press any key to start playing!</p>
 </div>
-<div id=blanks> </div>
+<!-- <div id=blanksID> </div>
+ -->
+<div class="scoreBoard">
+
+<p>wins: <span id="numWins"></span></p>
+<p><span id="blanksID"></span></p>
+<p>Tries Remaining: <span id="triesRemaining"></span></p>
+
+
+
+</div>
 
 
 <script type="text/javascript">
@@ -20,75 +30,87 @@ var wins = 0
 
 
 
-var game = {
-	userGuess: [],
-	words:['hamlet', 'macbeth', 'puck'], 
-	guesses: [],
-	blanks: [],
-	word: [],
-	triesLeft: [],
-	
-
-	init: function (){
-		this.triesLeft = 15;
-		this.guesses.length = 0;
-		this.render();
-		this.pickWord();
-		this.setWord();
-		this.play();
-		this.lose();
-		this.win();
-	},
-
-	
-
-	render: function(){document.querySelector('#gamey').innerHTML = game.html;
-	}, 
-
-	pickWord: function(){
-		this.word = this.words[Math.floor(Math.random()*this.words.length)];
+	var game = {
+		userGuess: [],
+		words:['hamlet', 'macbeth', 'puck'], 
+		guesses: [],
+		blanks: [],
+		word: [],
+		triesLeft: [],
 		
-	},
 
-	setWord: function(){
-		for (var i=0; i < this.word.length; i++){this.blanks.push('_')}
-	},
-
-	play: function(){
-		for (var i=0; i<this.word.length; i++){
-		//if wrong guess, displays wrong letter and subtracts//
-			if (this.word.indexOf(this.userGuess) === -1){this.guesses.push(this.userGuess); this.triesLeft--; 
-		//if correct, replaces the appropriate blank with guess//
-	 		}else{this.blanks[this.word.indexOf(this.userGuess)] = this.userGuess;
-	 		}
-		}
-	},
-
-	lose: function(){
-		//if you run out of tries, the game tells you the answer and resets//
-			if (this.triesLeft<1){alert('You ran out of tries! The answer was' + this.word)}
+		init: function (){
+			this.triesLeft = 15;
+			this.guesses.length = 0;
+			this.render();
+			this.pickWord();
+			this.setWord();
+			// this.play();
+			// this.lose();
+			// this.win();
 		},
 
-	win: function(){
+		render: function(){
 
-		//declares a win- this is where to add elements during a win//
+			document.getElementById('numWins').innerHTML=wins;
+			document.getElementById('blanksID').innerHTML=this.blanks;
+			document.getElementById('triesRemaining').innerHTML=this.triesLeft;
 
-		if (this.blanks.indexOf('_') === -1){wins++; game.init;}
-	},
 
-	html: "<p>wins: " + 
-        wins + 
-        "</p>" +
-        "<p>" + this.blanks + "</p>" +
-        "<p>Tries Remaining: " + 
-        this.triesLeft + 
-        "</p>" +
-        "<p>Guesses: " + 
-        this.guesses + 
-        "</p>"
+			// document.getElementById('blanksID').innerHTML = this.html;
 
- };
 
+
+		console.log(this.html)
+		}, 
+
+		pickWord: function(){
+			this.word = this.words[Math.floor(Math.random()*this.words.length)];
+			
+		},
+
+		setWord: function(){
+			for (var i=0; i < this.word.length; i++){this.blanks.push('_')}
+		},
+
+		play: function(){
+			for (var i=0; i<this.word.length; i++){
+			//if wrong guess, displays wrong letter and subtracts//
+				if (this.word.indexOf(this.userGuess) == -1){this.guesses.push(this.userGuess); this.triesLeft--; {break;}
+			//if correct, replaces the appropriate blank with guess//
+		 		}else{this.blanks[this.word.indexOf(this.userGuess)] = this.userGuess;
+		 		}
+			}
+//			debugger;
+
+		},
+
+		lose: function(){
+			//if you run out of tries, the game tells you the answer and resets//
+				if (this.triesLeft<1){alert('You ran out of tries! The answer was ' + this.word);this.pickWord();this.setWord();this.triesLeft= 15;}
+		},
+
+		win: function(){
+
+			//declares a win- this is where to add further elements during a win later//
+
+			if (this.blanks.indexOf('_') === -1){wins++; this.pickWord();this.setWord();}
+		},
+
+
+		html: "<p>wins: " + wins + "</p>" +
+	        "<p>" + this.blanks + "</p>" +
+	         "<p>Tries Remaining: " + 
+	       
+	        this.triesLeft + 
+	        "</p>" +
+	        "<p>Guesses: " + 
+	        this.guesses + 
+	        "</p>",
+
+		
+
+	 };
 
 
 
@@ -99,7 +121,15 @@ game.init();
 
 document.onkeyup = function(event) {
 	
-  game.userGuess = String.fromCharCode(event.keyCode).toLowerCase();};
+  game.userGuess = String.fromCharCode(event.keyCode).toLowerCase(); 
+	
+	game.play();
+	game.render();
+	game.lose();
+	game.win();
+
+
+};
 
 
 
